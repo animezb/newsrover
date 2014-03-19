@@ -444,7 +444,6 @@ func (r *Rover) SaveProgress(article int) {
 }
 
 func (r *Rover) Serve() error {
-	r.runningWg.Add(1)
 	if group, err := r.SwitchGroup(r.config.Group); err == nil {
 		if r.config.StartAt <= 0 {
 			r.lastArticle = group.High + r.config.StartAt
@@ -492,6 +491,7 @@ func (r *Rover) Serve() error {
 	defer func() {
 		r.SaveProgress(r.lastArticle)
 	}()
+	r.runningWg.Add(1)
 	defer func() {
 		r.runningWg.Done()
 	}()
